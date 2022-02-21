@@ -1,0 +1,6 @@
+@use '../utils/variables';
+
+html,
+body {
+  font-family: variables.$font;
+}

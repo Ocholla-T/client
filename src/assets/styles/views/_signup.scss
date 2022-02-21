@@ -1,0 +1,19 @@
+@use '../utils';
+
+section {
+  align-items: center;
+  display: grid;
+  height: 100vh;
+  justify-content: center;
+}
+
+.card {
+  > h1 {
+    color: #302f35;
+    font-weight: map-get($map: utils.$font-weights, $key: 'medium');
+  }
+
+  > p {
+    color: #605f64;
+  }
+}
