@@ -1,19 +1,78 @@
-@use '../utils';
+@use '@/assets/styles/utils';
 
 section {
   align-items: center;
   display: grid;
   height: 100vh;
   justify-content: center;
+  background: no-repeat center/100% url('@/assets/images/background.svg');
+
+  @include utils.breakpoint-down(medium) {
+    background: no-repeat center url('@/assets/images/background.svg');
+    background-size: auto 100%;
+  }
 }
 
-.card {
-  > h1 {
-    color: #302f35;
-    font-weight: map-get($map: utils.$font-weights, $key: 'medium');
+.form {
+  width: 33vw;
+  background-color: white;
+  padding: 2rem 3rem;
+  border-radius: 0.325rem;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+
+  @include utils.breakpoint-down(small) {
+    padding: 2rem;
   }
 
-  > p {
+  @include utils.breakpoint-down(medium) {
+    width: 90vw;
+  }
+
+  &__title {
+    color: #302f35;
+    font-weight: map-get($map: utils.$font-weights, $key: 'medium');
+    margin-bottom: 0.325rem;
+    font-size: 2rem;
+
+    @include utils.breakpoint-down(small) {
+      font-size: 1.5rem;
+    }
+  }
+
+  &__subtitle {
     color: #605f64;
+    font-size: 0.875rem;
+    font-weight: map-get($map: utils.$font-weights, $key: 'medium');
+    margin-bottom: 1.5rem;
+  }
+
+  &__button {
+    background-color: #f8f8f8;
+    border-radius: 0.325rem;
+    border: thin solid #babbc1;
+    color: #605f64;
+    cursor: pointer;
+    font-weight: map-get($map: utils.$font-weights, $key: 'medium');
+    margin: 0.41875rem 0;
+    padding: 0.875rem 1rem;
+    width: 100%;
+
+    &--blue {
+      background-color: #397ef6;
+      color: #f8f8f8;
+      border: none;
+    }
+
+    &--google {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      > img {
+        width: 20px;
+        margin-right: 1rem;
+        filter: brightness(0) saturate(100%) invert(45%) sepia(68%) saturate(3975%)
+          hue-rotate(208deg) brightness(103%) contrast(107%);
+      }
+    }
   }
 }
