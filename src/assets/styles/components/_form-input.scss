@@ -1,0 +1,25 @@
+label {
+  font-size: 0.875rem;
+}
+.input {
+  position: relative;
+  margin: 0.41875rem 0;
+  &__field {
+    border: thin solid #babbc1;
+    border-radius: 0.325rem;
+    padding: 0.875rem 1rem;
+    width: 100%;
+    &:focus {
+      outline: 1.5px solid #397ef6;
+    }
+  }
+
+  &__icon {
+    position: absolute;
+    right: 1rem;
+    top: 0.875rem;
+    width: 1.375rem;
+    filter: brightness(0) saturate(100%) invert(89%) sepia(7%) saturate(173%) hue-rotate(194deg)
+      brightness(87%) contrast(82%);
+  }
+}
