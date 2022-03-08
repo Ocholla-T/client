@@ -10,7 +10,7 @@ function getImageSource(image) {
 const inputs = [
   {
     title: 'E-mail',
-    inputType: 'text',
+    inputType: 'email',
     icon: getImageSource('at-outline'),
     placeholder: 'name@email.com',
   },
