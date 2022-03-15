@@ -1,16 +1,9 @@
 <script setup>
-import { ref } from 'vue';
-let isOpen = ref(true);
-
-function close() {
-  if (isOpen.value == true) {
-    return (isOpen.value = false);
-  }
-}
+defineEmits(['is-open']);
 </script>
 
 <template>
-  <div v-if="isOpen" class="card">
+  <div class="card">
     <p>
       <slot name="error_message"> </slot>
     </p>
@@ -18,7 +11,7 @@ function close() {
       class="card__icon"
       src="@/assets/images/close-circle-outline.svg"
       alt="close"
-      @click="close"
+      @click="$emit('is-open')"
     />
   </div>
 </template>
