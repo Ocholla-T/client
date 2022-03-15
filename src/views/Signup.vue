@@ -1,12 +1,13 @@
 <script setup>
+import { ref, computed } from 'vue';
+import { storeToRefs } from 'pinia';
+
 import FormInput from '@/components/FormInput.vue';
 import ErrorMessageCard from '@/components/ErrorMessageCard.vue';
-import { ref } from 'vue';
+import { useFetchUserStore } from '@/store/useFetchUser.js';
 
-function getImageSource(image) {
-  // @ts-ignore
-  return new URL(`../assets/images/${image}.svg`, import.meta.url).href;
-}
+const userStore = useFetchUserStore();
+const { responseMessage, hasMessage } = storeToRefs(userStore);
 
 const inputs = [
   {
@@ -32,37 +33,26 @@ const inputs = [
   },
 ];
 
-const errors = ref([]);
-async function hasError() {
-  if (errors.value.length > 0) {
-    console.log(true);
-  }
+function getImageSource(image) {
+  return new URL(`../assets/images/${image}.svg`, import.meta.url).href;
 }
 
-async function createAccount(event) {
-  errors.value = [];
+async function createAccount() {
+  userStore.$reset();
 
-  const user = {
-    email: inputs[0].inputValue.value,
-    password: inputs[1].inputValue.value,
-    confirmPassword: inputs[2].inputValue.value,
-  };
+  userStore.$patch((state) => {
+    state.user.email = inputs[0].inputValue.value;
+    state.user.password = inputs[1].inputValue.value;
+    state.user.confirmPassword = inputs[2].inputValue.value;
+  });
 
-  await fetch('http://localhost:9000/api', {
-    method: 'POST',
-    body: JSON.stringify({ ...user }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-    .then((res) => {
-      return res.json();
-    })
-    .then((json) => {
-      if (json.errors) {
-        errors.value.push(...json.errors);
-      }
-    });
+  await userStore.fetchUser();
+}
+
+function close() {
+  if (hasMessage.signup.value == true) {
+    hasMessage.signup.value = false;
+  }
 }
 </script>
 
@@ -74,9 +64,14 @@ async function createAccount(event) {
         Already have an account? <router-link to="/login">Sign in</router-link>
       </h4>
 
-      <transition-group v-for="error in errors" :key="error" name="fade" tag="div">
-        <ErrorMessageCard class="form__error_message" v-if="hasError">
-          <template v-slot:error_message> {{ error.message }} </template>
+      <transition-group
+        v-for="(message, index) in responseMessage"
+        :key="index"
+        name="fade"
+        tag="div"
+      >
+        <ErrorMessageCard class="form__error_message" v-if="hasMessage.signup" @is-open="close">
+          <template v-slot:error_message> {{ message.message }} </template>
         </ErrorMessageCard>
       </transition-group>
 
