@@ -1,11 +1,13 @@
 <script setup>
 // @ts-ignore
 import FormInput from '@/components/FormInput.vue';
+import ErrorMessageCard from '@/components/ErrorMessageCard.vue';
 
-function getImageSource(image) {
-  // @ts-ignore
-  return new URL(`../assets/images/${image}.svg`, import.meta.url).href;
-}
+import { useFetchUserStore } from '@/store/useFetchUser.js';
+import { computed } from 'vue';
+
+const userStore = useFetchUserStore();
+const { responseMessage, hasMessage } = userStore;
 
 const inputs = [
   {
@@ -21,6 +23,23 @@ const inputs = [
     placeholder: '8+ Characters, 1 Capital Letter',
   },
 ];
+
+const isSuccessMessage = computed(() => {
+  if (responseMessage[0].type == 'success') {
+    return true;
+  }
+});
+
+function getImageSource(image) {
+  // @ts-ignore
+  return new URL(`../assets/images/${image}.svg`, import.meta.url).href;
+}
+
+function close() {
+  if (hasMessage.login == true) {
+    hasMessage.login = false;
+  }
+}
 </script>
 
 <template>
@@ -28,6 +47,16 @@ const inputs = [
     <form class="form" action="submit">
       <h1 class="form__title">Welcome Back</h1>
       <p class="form__subtitle">You've been missed</p>
+
+      <transition name="fade" tag="div">
+        <ErrorMessageCard
+          :class="{ 'success-message': isSuccessMessage }"
+          v-if="hasMessage.login"
+          @is-open="close"
+        >
+          <template v-slot:error_message> {{ responseMessage[0].message }} </template>
+        </ErrorMessageCard>
+      </transition>
 
       <FormInput
         v-for="(input, index) in inputs"
